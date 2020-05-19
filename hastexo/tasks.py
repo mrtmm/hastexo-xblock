@@ -14,7 +14,7 @@ from tenacity import (
     retry_if_exception_type,
     stop_after_attempt,
     wait_exponential,
-    after_log
+    before_sleep_log,
 )
 
 from .models import Stack
@@ -53,7 +53,6 @@ PING_COMMAND = "ping -c 1 -W %d %s >/dev/null 2>&1"
 def close_connection_on_retry(retry_state):
     """Simple wrapper that accepts retry_state as a parameter,
     so that it can be used as a retry callback."""
-
     connection.close()
 
 
@@ -107,8 +106,8 @@ class HastexoTask(Task):
     @retry(retry=retry_if_exception_type(OperationalError),
            stop=stop_after_attempt(3),
            wait=wait_exponential(),
-           before_sleep=close_connection_on_retry,
-           after=after_log(logger, logging.WARNING),
+           after=close_connection_on_retry,
+           before_sleep=before_sleep_log(logger, logging.WARNING),
            reraise=True)
     @transaction.atomic
     def update_stack(self, data):
@@ -242,8 +241,8 @@ class LaunchStackTask(HastexoTask):
     @retry(retry=retry_if_exception_type(OperationalError),
            stop=stop_after_attempt(3),
            wait=wait_exponential(),
-           before_sleep=close_connection_on_retry,
-           after=after_log(logger, logging.WARNING),
+           after=close_connection_on_retry,
+           before_sleep=before_sleep_log(logger, logging.WARNING),
            reraise=True)
     def get_provider_stack_count(self, provider):
         stack_count = Stack.objects.filter(
