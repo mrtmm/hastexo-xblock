@@ -1,5 +1,8 @@
 Unreleased
 -------------------------
+* [Bug fix] Define a `max_score` method that returns the `weight`
+  attribute value. This is necessary for cerrectly calculating the
+  grade within a Subsection.
 * [Enhancement] Make progress check wait dialog wording more general
   and more suitable for different progress check configurations.
 

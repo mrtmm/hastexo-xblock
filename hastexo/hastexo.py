@@ -213,6 +213,12 @@ class HastexoXBlock(XBlock,
     icon_class = 'problem'
     block_settings_key = SETTINGS_KEY
 
+    def max_score(self):
+        """
+        Return the maximum possible score for this XBlock.
+        """
+        return self.weight
+
     def parse_attributes(tag, node, block):
         """
         Handle parsing tests, ports and providers.

@@ -839,6 +839,11 @@ class TestHastexoXBlock(TestCase):
         self.assertFalse(mock_launch_stack_task.called)
         self.assertEqual(response["status"], "RESUME_FAILED")
 
+    def test_max_score(self):
+        self.init_block()
+        max_score = self.block.max_score()
+        self.assertEqual(self.block.weight, max_score)
+
     def test_get_check_status(self):
         self.init_block()
         mock_result = Mock()
