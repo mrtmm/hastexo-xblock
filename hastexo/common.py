@@ -319,9 +319,9 @@ def ssh_to(user, ip, key):
     return ssh
 
 
-@retry(retry=retry_if_exception_type(SocketError),
+@retry(retry=retry_if_exception_type(SSHException),
        stop=stop_after_attempt(3),
-       wait=wait_exponential(),
+       wait=wait_exponential(min=10),
        before_sleep=before_sleep_log(logger, logging.WARNING),
        reraise=True)
 def remote_exec(ssh, script, params=None, reuse_sftp=None):
