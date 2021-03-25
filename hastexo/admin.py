@@ -3,7 +3,7 @@ Admin registration for hastexo Xblock models
 """
 from django import forms
 from django.contrib import admin
-from student.models import AnonymousUserId
+from common.djangoapps.student.models import AnonymousUserId
 
 from .common import DELETE_COMPLETE, VALID_STATES, get_xblock_settings
 from .models import Stack

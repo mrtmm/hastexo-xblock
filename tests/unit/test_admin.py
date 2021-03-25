@@ -8,7 +8,7 @@ from django.http import HttpRequest
 from django.test import TestCase
 from django.test.client import Client
 from django.urls import reverse
-from student.models import AnonymousUserId
+from common.djangoapps.student.models import AnonymousUserId
 from hastexo.admin import StackAdmin
 from hastexo.models import Stack
 
