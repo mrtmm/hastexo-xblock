@@ -325,6 +325,15 @@ This is a brief explanation of each:
   from the terminal window. (Default: `above`; this is currently an
   experimental feature)
 
+* `lab_usage_limit`: Allocate limited time per user for labs across the platform,
+  in hours. (Default is `None`, meaning there is no time limit).
+
+* `block_labs_over_limit`: Block access to labs when a `lab_time_limit` is set
+  and a learner has reached the limit. If set to `False`, will display a warning
+  that the limit has been reached but does allow to keep using the labs. If set
+  to `True` will block the learners access to labs after limit has been reached.
+  (Default: `False`)
+
 * `launch_timeout`: How long to wait for a stack to be launched, in seconds.
   (Default: `900`)
 

@@ -19,6 +19,7 @@ from hastexo.tasks import (
     CheckStudentProgressTask,
 )
 from celery.exceptions import SoftTimeLimitExceeded
+from django.contrib.auth.models import User
 from django.db.utils import OperationalError
 
 
@@ -100,10 +101,16 @@ class HastexoTestCase(TestCase):
         # Clear database
         Stack.objects.all().delete()
 
+        self.learner, _ = User.objects.get_or_create(
+            username="fake_user",
+            email="user@example.com"
+        )
+
         # Create stack in the database
         stack, _ = Stack.objects.get_or_create(
             student_id=self.student_id,
             course_id=self.course_id,
+            learner=self.learner,
             name=self.stack_name,
             status="LAUNCH_PENDING",
             protocol=self.protocol,
@@ -171,7 +178,8 @@ class HastexoTestCase(TestCase):
         stack, _ = Stack.objects.get_or_create(
             student_id=student_id,
             course_id=course_id,
-            name=name)
+            name=name,
+            learner=self.learner)
         update_stack_fields(stack, data)
         stack.save()
 

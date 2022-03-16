@@ -35,6 +35,9 @@ class StackCommon(models.Model):
     name = models.CharField(max_length=64, db_index=True)
     student_id = models.CharField(max_length=40, db_index=True)
     course_id = models.CharField(max_length=50, db_index=True)
+    learner = models.ForeignKey(django_settings.AUTH_USER_MODEL,
+                                db_index=True,
+                                on_delete=models.CASCADE)
     run = models.CharField(max_length=50, blank=True)
     provider = models.CharField(max_length=32, blank=True)
     providers = JSONField(default=list)

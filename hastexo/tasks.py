@@ -22,7 +22,7 @@ from tenacity import (
     before_sleep_log,
 )
 
-from .models import Stack
+from .models import Stack, StackLog
 from .provider import Provider, ProviderException
 from .common import (
     DELETE,
@@ -134,6 +134,55 @@ class LaunchStackTask(HastexoTask):
         # Set the arguments.
         for key, value in kwargs.items():
             setattr(self, key, value)
+
+        # If a time limit is set for using labs,
+        # check how much time learner has already spent
+        settings = get_xblock_settings()
+        lab_usage_limit = settings.get("lab_usage_limit", None)
+
+        if lab_usage_limit:
+            # don't look further than 365 days for lab launch
+            cutoff = timezone.now() - timezone.timedelta(days=365)
+
+            # get all learner stacks across the platform
+            stacks = Stack.objects.filter(learner__id=self.learner_id
+                ).filter(launch_timestamp__gt=cutoff)
+
+            # add up total time spent on labs in minutes
+            total_time_spent = 0
+            for stack in stacks:
+                # TODO: remove debug logs after testing
+                logger.info(f"STACK HAS LEARNER INFO?: {stack.learner.email}")
+                logger.info(f"STACK NAME: {stack.name}")
+
+                # A stacklog is saved each time the stack status changes,
+                # we only need to look at log entires with SUSPEND_COMPLETE
+                # status to get all records of active lab sessions with
+                # launch and suspend timestamps.
+                stacklog = StackLog.objects.filter(stack_id=stack.id
+                    ).filter(status="SUSPEND_COMPLETE")
+
+                # add up time spent on labs for one stack in minutes
+                time_spent = 0
+                for logentry in stacklog:
+                    time = (
+                        logentry.suspend_timestamp - logentry.launch_timestamp)
+                    time_spent += time.total_seconds() / 60
+                logger.info(f"TIME SPENT FOR ONE LAB IN MINUTES: {time_spent}")
+                total_time_spent += time_spent
+
+            logger.info(
+                f"TOTAL TIME SPENT ON LABS IN MINUTES: {total_time_spent}")
+
+            if total_time_spent > (lab_usage_limit * 60):
+                logger.error("Learner has gone over the lab usage limit!")
+                if settings.get("block_labs_over_limit", False):
+                    # TODO: test how this message will be handled/presented;
+                    # add proper message
+                    raise LaunchStackFailed("boo :(")
+                else:
+                    # TODO: pass a warning message; tweak js to display it
+                    pass
 
         # Get the stack
         stack = Stack.objects.get(id=self.stack_id)
