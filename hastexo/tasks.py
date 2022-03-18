@@ -167,14 +167,14 @@ class LaunchStackTask(HastexoTask):
                 for logentry in stacklog:
                     time = (
                         logentry.suspend_timestamp - logentry.launch_timestamp)
-                    time_spent += time.total_seconds() / 60
-                logger.info(f"TIME SPENT FOR ONE LAB IN MINUTES: {time_spent}")
+                    time_spent += time.total_seconds()
+                logger.info(f"TIME SPENT FOR ONE LAB IN SECONDS: {time_spent}")
                 total_time_spent += time_spent
 
             logger.info(
-                f"TOTAL TIME SPENT ON LABS IN MINUTES: {total_time_spent}")
+                f"TOTAL TIME SPENT ON LABS IN SECONDS: {total_time_spent}")
 
-            if total_time_spent > (lab_usage_limit * 60):
+            if total_time_spent > lab_usage_limit:
                 logger.error("Learner has gone over the lab usage limit!")
 
                 policy = settings.get("lab_usage_limit_breach_policy",

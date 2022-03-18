@@ -326,7 +326,7 @@ This is a brief explanation of each:
   experimental feature)
 
 * `lab_usage_limit`: Allocate limited time per user for labs across the platform,
-  in hours. (Default is `None`, meaning there is no time limit).
+  in seconds. (Default is `None`, meaning there is no time limit).
 
 * `lab_usage_limit_breach_policy`: What to do when the learner's lab
   limit has been exceeded.
