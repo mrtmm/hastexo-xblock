@@ -26,14 +26,14 @@ class Migration(migrations.Migration):
             model_name='stack',
             name='learner',
             field=models.ForeignKey(
-                null=True, on_delete=django.db.models.deletion.CASCADE,
+                null=True, on_delete=django.db.models.deletion.PROTECT,
                 to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='stacklog',
             name='learner',
             field=models.ForeignKey(
-                null=True, on_delete=django.db.models.deletion.CASCADE,
+                null=True, on_delete=django.db.models.deletion.PROTECT,
                 to=settings.AUTH_USER_MODEL),
         ),
         migrations.RunPython(backfill_learner),
@@ -41,14 +41,14 @@ class Migration(migrations.Migration):
             model_name='stack',
             name='learner',
             field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE,
+                on_delete=django.db.models.deletion.PROTECT,
                 to=settings.AUTH_USER_MODEL),
         ),
         migrations.AlterField(
             model_name='stacklog',
             name='learner',
             field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE,
+                on_delete=django.db.models.deletion.PROTECT,
                 to=settings.AUTH_USER_MODEL),
         )
     ]
