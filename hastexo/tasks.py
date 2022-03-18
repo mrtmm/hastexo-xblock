@@ -176,11 +176,23 @@ class LaunchStackTask(HastexoTask):
 
             if total_time_spent > (lab_usage_limit * 60):
                 logger.error("Learner has gone over the lab usage limit!")
-                if settings.get("block_labs_over_limit", False):
+
+                policy = settings.get("lab_usage_limit_breach_policy",
+                                      "").lower()
+
+                if policy:
+                    # TODO: If policy is anything but None or the
+                    # empty string (meaning it's notify, warn, or
+                    # block), log a message including the learner's
+                    # email with the django logger, so that email goes
+                    # out to ADMINS
+                    pass
+
+                if policy == 'block':
                     # TODO: test how this message will be handled/presented;
                     # add proper message
                     raise LaunchStackFailed("boo :(")
-                else:
+                elif policy == 'warn':
                     # TODO: pass a warning message; tweak js to display it
                     pass
 

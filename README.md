@@ -328,11 +328,19 @@ This is a brief explanation of each:
 * `lab_usage_limit`: Allocate limited time per user for labs across the platform,
   in hours. (Default is `None`, meaning there is no time limit).
 
-* `block_labs_over_limit`: Block access to labs when a `lab_time_limit` is set
-  and a learner has reached the limit. If set to `False`, will display a warning
-  that the limit has been reached but does allow to keep using the labs. If set
-  to `True` will block the learners access to labs after limit has been reached.
-  (Default: `False`)
+* `lab_usage_limit_breach_policy`: What to do when the learner's lab
+  limit has been exceeded.
+
+  * `None` (the default) means just write a message to the logs.
+
+  * `notify` will do the same but using a different log facility (one
+  that sends an email to site administrators, if the Django `ADMINS`
+  option is configured).
+
+  * `warn` will display a display a warning to the learner that the
+  limit has been reached, but does allow them to keep using the labs.
+
+  * `block` blocks the learner's access to the lab.
 
 * `launch_timeout`: How long to wait for a stack to be launched, in seconds.
   (Default: `900`)

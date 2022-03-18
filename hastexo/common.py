@@ -175,7 +175,7 @@ DEFAULT_SETTINGS = {
     "providers": {},
     "guacamole_js_version": '1.4.0',
     "lab_usage_limit": None,
-    "block_labs_over_limit": False
+    "lab_usage_limit_breach_policy": None
 }
 
 
