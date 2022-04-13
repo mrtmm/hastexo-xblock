@@ -80,3 +80,5 @@ if CONFIG_FILE:
             'Unable to update configuration '
             'with contents of %s: %s' % (CONFIG_FILE, e)
         )
+
+XBLOCK_SETTINGS = os.environ.get('HASTEXO_XBLOCK_SETTINGS', {})
