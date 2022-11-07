@@ -1,4 +1,4 @@
-Unreleased
+Version 7.1.0 (2022-11-07)
 -------------------------
 * [Enhancement] Add custom actions to the admin interface to
   - clear the stacklog for selected stack(s),
