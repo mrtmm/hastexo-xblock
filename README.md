@@ -660,6 +660,19 @@ stack is resumed automatically.  They are connected to the same training
 environment they were working with before, in the *same state* they left it in.
 (The process of suspension works just like in a home computer.)
 
+### Copy & paste
+
+Copy & paste to and from the lab environment is possible, with some considerations.
+
+Pasting _into_ the lab environment requires two steps, because we are dealing with
+two clipboards (one for the browser and one for the lab environment).
+For example, when a learner tries to paste text into a terminal window, at first the
+text will be written into the lab enviroments clipboard and only when they follow up
+with a `Ctrl+Shift+v`, the text will be pasted into the terminal.
+
+Copying _out_ from the lab environment requires only one step, however at this time
+it works only on Mozilla Firefox but support in other browsers may follow.
+
 
 ## Django admin page
 
