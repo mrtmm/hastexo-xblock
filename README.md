@@ -662,16 +662,37 @@ environment they were working with before, in the *same state* they left it in.
 
 ### Copy & paste
 
-Copy & paste to and from the lab environment is possible, with some considerations.
+Within the text terminal, learners can use copy and paste by marking
+up text with the left mouse button, and then using right-click or
+middle-click to paste.
 
-Pasting _into_ the lab environment requires two steps, because we are dealing with
-two clipboards (one for the browser and one for the lab environment).
-For example, when a learner tries to paste text into a terminal window, at first the
-text will be written into the lab enviroments clipboard and only when they follow up
-with a `Ctrl+Shift+v`, the text will be pasted into the terminal.
+Within the graphical (RDP) terminal, so long as the terminal has focus
+(normally meaning that the learner has left-clicked into it once),
+learners can use any copy and paste facility that the desktop
+provides. This includes the `Ctrl-C`/`Ctrl-V` key combinations, and
+middle mouse clicks.
 
-Copying _out_ from the lab environment requires only one step, however at this time
-it works only on Mozilla Firefox but support in other browsers may follow.
+Copy & paste to and from the lab environment (i.e. from the terminal
+to the learner's browser, or vice versa) is also possible, though some
+considerations apply.
+
+Pasting _into_ the lab environment requires two transitions, because
+we are dealing with two clipboards (one for the browser and one for
+the lab environment). Thus, the learner must
+
+1. Copy something into their clipboard on their client.
+2. Left-click into the terminal.
+3. Hit `Ctrl-V`.
+4. Right-click (or middle-click) in the terminal.
+
+Copying _out_ from the lab environment is more direct, though at this
+time it works only on Mozilla Firefox (support in other browsers may
+follow). To copy from their terminal into their local clipboard, the
+learner must
+
+1. Mark up some text in their terminal.
+2. Switch to another application window on their client.
+3. Hit `Ctrl-V`.
 
 
 ## Django admin page
