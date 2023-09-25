@@ -46,6 +46,7 @@ class GuacamoleWebSocketConsumer(AsyncWebsocketConsumer):
             color_scheme=settings.get("terminal_color_scheme"),
             font_name=settings.get("terminal_font_name"),
             font_size=settings.get("terminal_font_size"),
+            enable_agent=True
         )
 
         if self.client.connected:
