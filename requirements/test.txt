@@ -18,3 +18,4 @@ path.py>=12.4
 ddt
 nose
 coverage
+setuptools-scm
