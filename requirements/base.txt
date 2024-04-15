@@ -15,7 +15,6 @@ python-heatclient>=1.6.1,<2
 python-keystoneclient>=3.17.0,<3.22
 python-novaclient>=7.1.2,<16
 tenacity>=6.2,<8
-setuptools-scm
 
 # for hastexo_guacamole_client
 django<=4.2.8
