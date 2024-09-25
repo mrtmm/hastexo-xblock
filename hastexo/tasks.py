@@ -709,6 +709,9 @@ class SuspendStackTask(HastexoTask):
         stack_data['delete_by'] = timezone.now() + timezone.timedelta(
             seconds=stack.delete_age)
 
+        # Clear the connection_id value
+        stack_data['connection_id'] = None
+
         self.update_stack(stack_data)
 
     def suspend_stack(self, stack):

@@ -113,7 +113,8 @@ class StackAdmin(admin.ModelAdmin):
                        "port", "ip", "launch_timestamp", "suspend_timestamp",
                        "suspend_by", "created_on", "error_msg", "delete_age",)
     exclude = ("student_id", "providers", "hook_script", "hook_events",
-               "launch_task_id", "user", "key", "password", "learner")
+               "launch_task_id", "user", "key", "password", "learner",
+               "connection_id")
     ordering = ("-launch_timestamp",)
 
     def get_changelist_form(self, request, **kwargs):

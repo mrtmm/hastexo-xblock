@@ -15,6 +15,7 @@ class GuacamoleWebSocketConsumer(AsyncWebsocketConsumer):
     client = None
     task = None
     read_only = False
+    stack = None
 
     async def connect(self):
         """
@@ -28,27 +29,38 @@ class GuacamoleWebSocketConsumer(AsyncWebsocketConsumer):
         params = urllib.parse.parse_qs(self.scope['query_string'].decode())
         stack_name = params.get('stack')[0]
 
-        stack = await database_sync_to_async(self.get_stack)(stack_name)
-        default_port = 3389 if stack.protocol == 'rdp' else 22
+        self.stack = await database_sync_to_async(self.get_stack)(stack_name)
+        default_port = 3389 if self.stack.protocol == 'rdp' else 22
 
         self.read_only = bool(strtobool(params.get('read_only')[0]))
 
+        user_is_masquerading = bool(strtobool(
+            params.get('user_is_masquerading')[0]))
+
         self.client = GuacamoleClient(guacd_hostname, guacd_port)
-        self.client.handshake(
-            protocol=stack.protocol,
-            width=params.get('width', [1024])[0],
-            height=params.get('height', [768])[0],
-            hostname=stack.ip,
-            port=params.get('port', [default_port])[0],
-            username=stack.user,
-            password=stack.password,
-            private_key=stack.key,
-            color_scheme=settings.get("terminal_color_scheme"),
-            font_name=settings.get("terminal_font_name"),
-            font_size=settings.get("terminal_font_size"),
-        )
+        connection_args = {
+            'protocol': self.stack.protocol,
+            'width': params.get('width', [1024])[0],
+            'height': params.get('height', [768])[0],
+            'hostname': self.stack.ip,
+            'port': params.get('port', [default_port])[0],
+            'username': self.stack.user,
+            'password': self.stack.password,
+            'private_key': self.stack.key,
+            'color_scheme': settings.get("terminal_color_scheme"),
+            'font_name': settings.get("terminal_font_name"),
+            'font_size': settings.get("terminal_font_size")
+        }
+        if user_is_masquerading and self.stack.connection_id:
+            connection_args['connectionid'] = self.stack.connection_id
+
+        self.client.handshake(**connection_args)
 
         if self.client.connected:
+            # save the connection id if user is not masquerading
+            if not user_is_masquerading:
+                await database_sync_to_async(self.update_stack)(self.client.id)
+
             # start receiving data from GuacamoleClient
             loop = asyncio.get_running_loop()
             self.task = loop.create_task(self.open())
@@ -60,6 +72,10 @@ class GuacamoleWebSocketConsumer(AsyncWebsocketConsumer):
 
     def get_stack(self, stack_name):
         return Stack.objects.get(name=stack_name)
+
+    def update_stack(self, connection_id):
+        self.stack.connection_id = connection_id
+        self.stack.save(update_fields=['connection_id'])
 
     async def disconnect(self, code):
         """

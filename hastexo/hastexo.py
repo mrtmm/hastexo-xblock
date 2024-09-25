@@ -1,3 +1,4 @@
+import crum
 import time
 import logging
 import os
@@ -36,6 +37,7 @@ from django.utils import timezone, translation
 from lxml import etree
 
 from common.djangoapps.student.models import AnonymousUserId
+from lms.djangoapps.courseware.masquerade import is_masquerading
 
 from .models import Stack
 from .common import (
@@ -268,6 +270,7 @@ class HastexoXBlock(XBlock,
     has_children = True
     icon_class = 'problem'
     block_settings_key = SETTINGS_KEY
+    show_in_read_only_mode = True
 
     def parse_attributes(tag, node, block):
         """
@@ -637,7 +640,7 @@ class HastexoXBlock(XBlock,
             self, 'public/js/plugins.js')
 
         # guacamole common library url
-        guac_js_version = settings.get("guacamole_js_version", "1.5.4")
+        guac_js_version = settings.get("guacamole_js_version", "1.5.5")
         guac_common_url = (
             self.runtime.local_resource_url(
                 self,
@@ -733,6 +736,10 @@ class HastexoXBlock(XBlock,
         self.stack_run = "%s_%s" % (course_id.course, course_id.run)
         self.stack_name = self.get_stack_name()
 
+        # Check if the current request user is masquerading
+        user_is_masquerading = is_masquerading(crum.get_current_user(),
+                                               course_id)
+
         enable_fullscreen = self.get_enable_fullscreen(settings)
 
         frag = Fragment()
@@ -763,7 +770,8 @@ class HastexoXBlock(XBlock,
         frag.add_content(loader.render_django_template(
             "static/html/main.html",
             {"child_content": child_content,
-             "enable_fullscreen": enable_fullscreen},
+             "enable_fullscreen": enable_fullscreen,
+             "user_is_masquerading": user_is_masquerading},
             i18n_service=i18n_service
         ))
 

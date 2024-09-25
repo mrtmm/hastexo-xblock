@@ -184,6 +184,7 @@ function HastexoGuacamoleClient(configuration) {
                     'width': configuration.width,
                     'height': configuration.height,
                     'port': port,
+                    'user_is_masquerading': configuration.user_is_masquerading
                 }));
                 terminal_connected = true;
             } catch (e) {

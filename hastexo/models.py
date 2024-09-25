@@ -71,6 +71,7 @@ class Stack(StackCommon):
                                 null=True,
                                 db_index=True,
                                 on_delete=models.PROTECT)
+    connection_id = models.CharField(max_length=128, blank=True, null=True)
 
     def __init__(self, *args, **kwargs):
         super(Stack, self).__init__(*args, **kwargs)
