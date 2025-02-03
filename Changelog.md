@@ -1,3 +1,10 @@
+Unreleased
+-------------------------
+* [Enhancement] Add the possibility to dynamically resize the lab on the 
+  LMS page. For RDP connections, implement the options provided by 
+  Apache Guacamole, to `display-update` _(For RDP 8.1+ only)_ or 
+  `reconnect` (the default) when the client display size changes.
+
 Version 8.2.0 (2025-01-03)
 -------------------------
 * [Enhancement] Add support for Apache Guacamole 1.5.5;
